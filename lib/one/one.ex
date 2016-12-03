@@ -3,7 +3,8 @@ defmodule One do
 
   def main do
     File.read!("./lib/one/data/input.txt")
-    |> String.split(",")
+    |> String.trim()
+    |> String.split(", ")
     |> Enum.map(&split_step/1)
     |> Traversal.plot_route()
     |> calculate_distance()
@@ -12,7 +13,6 @@ defmodule One do
 
   def split_step(step) do
     step
-    |> String.trim()
     |> String.split_at(1)
     |> convert_to_int
   end
@@ -21,9 +21,13 @@ defmodule One do
      { direction, String.to_integer(int_string) }
   end
 
-  def calculate_distance(state), do: abs(state.x) + abs(state.y)
+  def calculate_distance(state) do
+    %{ state | blocks: abs(state.x) + abs(state.y) }
+  end
 
-  def print_output(blocks), do: IO.puts "#{blocks} blocks from the start."
+  def print_output(state) do
+    IO.puts "Day 1 - #{state.blocks} blocks from the start, at x: #{state.x} y: #{state.y} "
+  end
 
 end
 
