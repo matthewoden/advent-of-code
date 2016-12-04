@@ -1,7 +1,6 @@
-defmodule Two do
+defmodule DayTwoPartTwo do
   def main do
-    IO.puts("---------")
-    File.read!("./lib/two/data/input.txt")
+    File.read!("./lib/2/data/input.txt")
     |> format_input
     |> traverse
     |> format_output
@@ -111,5 +110,3 @@ defmodule Two do
     %{ state | :key => [ key | state.key ] }
   end
 end
-
-Two.main()

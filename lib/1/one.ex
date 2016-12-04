@@ -1,8 +1,8 @@
-defmodule One do
+defmodule DayOne do
   require Logger
 
   def main do
-    File.read!("./lib/one/data/input.txt")
+    File.read!("./lib/1/data/input.txt")
     |> String.trim()
     |> String.split(", ")
     |> Enum.map(&split_step/1)
@@ -30,5 +30,3 @@ defmodule One do
   end
 
 end
-
-One.main()
