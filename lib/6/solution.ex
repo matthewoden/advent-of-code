@@ -14,8 +14,7 @@ defmodule DaySix.Solution do
   def handle_stream(stream) do
     stream
     |> Enum.map(&handle_line(&1))
-    |> Enum.reduce(%{}, fn (line, map) -> accumulate(map, line) end)
-    |> IO.inspect
+    |> Enum.reduce(%{}, fn (line, map) -> count_letters(map, line) end)
     |> Map.values()
   end
 
@@ -23,27 +22,26 @@ defmodule DaySix.Solution do
     line
     |> String.replace("\n", "")
     |> String.split("", trim: true)
-    |> map_letters(0, [])
+    |> map_positions(0, [])
   end
 
-  def map_letters([], _, state), do: Enum.reverse state
-  def map_letters([ letter | tail ], position, state) do
-    map_letters(tail, position + 1, [{ position, letter } | state ])
+  def map_positions([], _, state), do: Enum.reverse state
+  def map_positions([ letter | tail ], position, state) do
+    map_positions(tail, position + 1, [{ position, letter } | state ])
   end
 
-  def accumulate(map, []), do: map
-  def accumulate(map, [{ position, letter} | rest ]) do
+  def count_letters(map, []), do: map
+  def count_letters(map, [{ position, letter} | rest ]) do
     initial_state = %{ letter => 1, max: letter, min: letter }
     Map.update(map, position, initial_state, &update_position(&1, letter))
-    |> accumulate(rest)
+    |> count_letters(rest)
   end
 
   def update_position(state, letter) do
     state
     |> Map.update(letter, 1, &(&1 + 1))
     |> save_highest(letter)
-    |> save_lowest(letter)
-
+    |> save_lowest
   end
 
   def save_highest(state, letter) do
@@ -54,13 +52,12 @@ defmodule DaySix.Solution do
     end
   end
 
-  def save_lowest(state, letter) do
-    [ { lowest, lowest_value } | rest ] =
+  def save_lowest(state) do
+    [ { lowest, _ } | _rest ] =
       state
       |> Map.drop([:min, :max])
       |> Map.to_list()
       |> Enum.sort(fn {_k1, a1}, {_k2, a2} -> a1 < a2 end)
-
 
     Map.put(state, :min, lowest)
   end
