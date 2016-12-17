@@ -52,6 +52,6 @@ defmodule DaySeven.PartOne do
 
 end
 
-File.stream!("./lib/7/data/input.txt")
-|> DaySeven.PartOne.solve()
-|> IO.inspect
+# File.stream!("./lib/7/data/input.txt")
+# |> DaySeven.PartOne.solve()
+# |> IO.inspect
